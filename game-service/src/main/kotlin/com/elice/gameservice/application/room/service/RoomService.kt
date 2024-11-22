@@ -13,10 +13,10 @@ class RoomService(
     private val roomStore: RoomStore
 ) {
     @Transactional
-    fun createRoom(subject: String, memberLimit: Int, explanationSecond: Long, memberId: Long) {
+    fun createRoom(subject: String, memberLimit: Int, explanationSecond: Long, memberId: Long): Room {
         val room = Room(subject = subject, memberLimit = memberLimit, explanationSecond = explanationSecond)
         room.createRoomMember(memberId)
-        roomStore.saveRoom(room)
+        return roomStore.saveRoom(room)
     }
 
     @Transactional

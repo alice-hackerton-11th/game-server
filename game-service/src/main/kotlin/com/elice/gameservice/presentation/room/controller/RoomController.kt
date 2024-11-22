@@ -17,9 +17,17 @@ class RoomController(
     fun createRoom(
         @RequestBody @Valid request: CreateRoomRequestDto,
         @RequestAttribute memberId: Long
-    ): BaseResponse<Any> {
-        roomService.createRoom(request.subject, request.memberLimit, request.explanationSecond, memberId)
-        return BaseResponse(BaseResponseStatus.SUCCESS)
+    ): BaseResponse<GetRoomRequestDto> {
+        val room = roomService.createRoom(request.subject, request.memberLimit, request.explanationSecond, memberId)
+        return BaseResponse(
+            GetRoomRequestDto(
+                roomId = room.id!!,
+                subject = room.subject,
+                status = room.roomProgressState,
+                memberCount = room.memberCount,
+                explanationSecond = room.explanationSecond
+            )
+        )
     }
 
     @PostMapping("/room/{roomId}/enter")
