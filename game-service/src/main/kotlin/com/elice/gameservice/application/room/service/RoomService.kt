@@ -2,7 +2,7 @@ package com.elice.gameservice.application.room.service
 
 import com.elice.common.exception.NotFoundException
 import com.elice.common.response.BaseResponseStatus
-import com.elice.gameservice.domain.common.value.RoomMemberEnteredState
+import com.elice.common.response.PageResponse
 import com.elice.gameservice.domain.room.model.Room
 import com.elice.gameservice.domain.room.store.RoomStore
 import jakarta.transaction.Transactional
@@ -22,7 +22,7 @@ class RoomService(
     @Transactional
     fun enterRoom(roomId: Long, memberId: Long) {
         roomStore.findRoomMember(roomId, memberId)?.apply {
-            this.roomMemberEnteredState = RoomMemberEnteredState.ENTERED
+            this.enterRoom()
         } ?: run {
             val room = roomStore.findRoomById(roomId) ?: throw NotFoundException(BaseResponseStatus.NOT_FOUND_ROOM)
             room.createRoomMember(memberId)
@@ -33,6 +33,17 @@ class RoomService(
     fun exitRoom(roomId: Long, memberId: Long) {
         val roomMember = roomStore.findRoomMember(roomId, memberId)
             ?: throw NotFoundException(BaseResponseStatus.NOT_FOUND_ROOM_USER)
-        roomMember.roomMemberEnteredState = RoomMemberEnteredState.NOT_ENTERED
+        roomMember.exitRoom()
+    }
+
+    @Transactional
+    fun findAllRoom(page: Int, size: Int): PageResponse<Room> {
+        val roomList = roomStore.findAllRoom(page, size)
+        val roomCount = roomStore.countAllRoom()
+        return PageResponse(
+            content = roomList,
+            totalElements = roomCount,
+            totalPages = (roomCount / size).toInt(),
+        )
     }
 }
