@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface RoomRepository : JpaRepository<Room, Long> {
+    fun findRoomById(roomId: Long): Room?
 }

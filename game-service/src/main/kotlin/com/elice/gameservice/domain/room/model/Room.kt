@@ -18,7 +18,7 @@ class Room(
     @OneToMany(mappedBy = "room", cascade = [CascadeType.PERSIST])
     var roomMemberList: MutableList<RoomMember> = ArrayList()
 
-    fun addRoomMember(memberId: Long) {
+    fun createRoomMember(memberId: Long) {
         val roomMember = RoomMember(this, memberId)
         roomMember.roomMemberEnteredState = RoomMemberEnteredState.ENTERED
         roomMemberList.add(roomMember)
