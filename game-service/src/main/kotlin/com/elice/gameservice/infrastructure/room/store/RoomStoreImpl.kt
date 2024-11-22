@@ -1,6 +1,8 @@
 package com.elice.gameservice.infrastructure.room.store
 
 import com.elice.gameservice.domain.common.enums.DeleteState
+import com.elice.gameservice.domain.member.model.Member
+import com.elice.gameservice.domain.room.enums.RoomMemberEnteredState
 import com.elice.gameservice.domain.room.model.Room
 import com.elice.gameservice.domain.room.model.RoomMember
 import com.elice.gameservice.domain.room.store.RoomStore
@@ -34,5 +36,16 @@ class RoomStoreImpl(
 
     override fun countAllRoom(): Long {
         return roomRepository.countAllRoomByDeleteState(DeleteState.NOT_DELETED)
+    }
+
+    override fun findAllRoomMember(room: Room): List<RoomMember> {
+        return roomMemberRepository.findAllRoomMemberByRoomAndRoomMemberEnteredState(
+            room,
+            RoomMemberEnteredState.ENTERED
+        )
+    }
+
+    override fun findAllMemberInRoom(room: Room): List<Member> {
+        return roomMemberRepository.findAllMemberInRoom(room)
     }
 }

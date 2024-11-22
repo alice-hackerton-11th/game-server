@@ -5,6 +5,7 @@ import com.elice.common.response.BaseResponseStatus
 import com.elice.common.response.PageResponse
 import com.elice.gameservice.application.room.service.RoomService
 import com.elice.gameservice.presentation.room.dto.CreateRoomRequestDto
+import com.elice.gameservice.presentation.room.dto.GetMemberInRoomResponseDto
 import com.elice.gameservice.presentation.room.dto.GetRoomRequestDto
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
@@ -72,4 +73,17 @@ class RoomController(
         return BaseResponse(pageResponse)
     }
 
+    @GetMapping("/room/{roomId}/member")
+    fun findMemberInRoom(
+        @PathVariable roomId: Long
+    ): BaseResponse<List<GetMemberInRoomResponseDto>> {
+        val memberResponse = roomService.findMemberInRoom(roomId)
+            .map {
+                GetMemberInRoomResponseDto(
+                    memberId = it.id!!,
+                    name = it.name
+                )
+            }
+        return BaseResponse(memberResponse)
+    }
 }

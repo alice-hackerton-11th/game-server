@@ -3,6 +3,7 @@ package com.elice.gameservice.application.room.service
 import com.elice.common.exception.NotFoundException
 import com.elice.common.response.BaseResponseStatus
 import com.elice.common.response.PageResponse
+import com.elice.gameservice.domain.member.model.Member
 import com.elice.gameservice.domain.room.model.Room
 import com.elice.gameservice.domain.room.store.RoomStore
 import jakarta.transaction.Transactional
@@ -45,5 +46,11 @@ class RoomService(
             totalElements = roomCount,
             totalPages = (roomCount / size).toInt(),
         )
+    }
+
+    @Transactional
+    fun findMemberInRoom(roomId: Long): List<Member> {
+        val room = roomStore.findRoomById(roomId) ?: throw NotFoundException(BaseResponseStatus.NOT_FOUND_ROOM)
+        return roomStore.findAllMemberInRoom(room)
     }
 }
