@@ -12,7 +12,8 @@ import org.springframework.stereotype.Service
 @Service
 class GameService(
     private val gameStore: GameStore,
-    private val roomStore: RoomStore
+    private val roomStore: RoomStore,
+    private val notificationService: NotificationService
 ) {
     @Transactional
     fun startGame(roomId: Long): GameState {
@@ -26,15 +27,16 @@ class GameService(
             currentTurnMemberId = members.first().memberId,
             roundId = 1
         )
+        notificationService.sendNotificationToRoom(roomId, "게임이 시작되었습니다")
         return gameStore.saveGameState(gameState)
     }
 
-    @Transactional
     fun updateTurn(roomId: Long): GameState {
         val gameState =
             gameStore.findGameState(roomId) ?: throw NotFoundException(BaseResponseStatus.NOT_FOUND_GAME_STATE)
         if (gameState.currentTurnIndex() + 1 >= gameState.members.size) {
             gameState.updateRound()
+            notificationService.sendNotificationToRoom(roomId, "${gameState.roomId}라운드가 시작되었습니다")
         } else {
             gameState.updateTurn()
         }
