@@ -10,9 +10,9 @@ class GameState(
         return members.indexOfFirst { it.isTurn }
     }
 
-    fun updateRound(){
+    fun updateRound() {
         roundId++;
-        members.forEachIndexed{ index, gameMemberInfo ->
+        members.forEachIndexed { index, gameMemberInfo ->
             gameMemberInfo.isTurn = index == 0
             gameMemberInfo.isFinished = false
         }
@@ -20,7 +20,8 @@ class GameState(
 
     fun updateTurn() {
         val currentTurnIndex = currentTurnIndex()
-        val nextTurnIndex = (currentTurnIndex + 1) % members.size
+        val nextTurnIndex = generateSequence((currentTurnIndex + 1) % members.size) { (it + 1) % members.size }
+            .first { members[it].heart > 0 }
         members.forEachIndexed { index, gameMemberInfo ->
             gameMemberInfo.apply {
                 isTurn = index == nextTurnIndex

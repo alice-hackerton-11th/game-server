@@ -19,7 +19,7 @@ class GameService(
     fun startGame(roomId: Long): GameState {
         val room = roomStore.findRoomById(roomId) ?: throw NotFoundException(BaseResponseStatus.NOT_FOUND_ROOM)
         val members = roomStore.findAllRoomMember(room).mapIndexed { index, roomMember ->
-            GameMemberInfo(memberId = roomMember.memberId, isTurn = index == 0, isFinished = false)
+            GameMemberInfo(memberId = roomMember.memberId, isTurn = index == 0, isFinished = false, heart = 100)
         }
         val gameState = GameState(
             roomId = roomId,
