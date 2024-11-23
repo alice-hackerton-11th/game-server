@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository
 interface RoomMemberRepository : JpaRepository<RoomMember, Long> {
     @Query(
         "SELECT rm FROM RoomMember rm " +
-                "WHERE rm.room.id = :roomId AND rm.memberId =:memberId AND rm.room.deleteState = 'NOT_DELTED' "
+                "WHERE rm.room.id = :roomId AND rm.memberId =:memberId AND rm.room.deleteState = 'NOT_DELETED' "
     )
     fun findRoomMemberByRoomIdAndMemberId(roomId: Long, memberId: Long): RoomMember?
     fun findAllRoomMemberByRoomAndRoomMemberEnteredState(
