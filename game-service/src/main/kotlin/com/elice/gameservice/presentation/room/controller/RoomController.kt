@@ -4,6 +4,7 @@ import com.elice.common.response.BaseResponse
 import com.elice.common.response.BaseResponseStatus
 import com.elice.common.response.PageResponse
 import com.elice.gameservice.application.room.service.RoomService
+import com.elice.gameservice.domain.room.store.RoomStore
 import com.elice.gameservice.presentation.room.dto.CreateRoomRequestDto
 import com.elice.gameservice.presentation.room.dto.GetMemberInRoomResponseDto
 import com.elice.gameservice.presentation.room.dto.GetRoomRequestDto
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 class RoomController(
-    private val roomService: RoomService
+    private val roomService: RoomService,
+    private val roomStore: RoomStore
 ) {
     @PostMapping("/room")
     fun createRoom(
@@ -85,5 +87,12 @@ class RoomController(
                 )
             }
         return BaseResponse(memberResponse)
+    }
+
+    @GetMapping("/topic")
+    fun getTopicList(): BaseResponse<List<String>> {
+        val topicList = roomStore.getTopicList()
+            .map { it.topic }.toList()
+        return BaseResponse(topicList)
     }
 }

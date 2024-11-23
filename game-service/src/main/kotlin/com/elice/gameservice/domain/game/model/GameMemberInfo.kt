@@ -4,5 +4,6 @@ data class GameMemberInfo(
     val memberId: Long,
     var isTurn: Boolean,
     var isFinished: Boolean,
-    var heart: Int
+    var heart: Int,
+    var role: String
 )

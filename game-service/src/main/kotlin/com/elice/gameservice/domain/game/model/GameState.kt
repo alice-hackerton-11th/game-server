@@ -4,7 +4,8 @@ data class GameState(
     val roomId: Long,
     val members: List<GameMemberInfo>,
     var currentTurnMemberId: Long,
-    var roundId: Int
+    var roundId: Int,
+    var keyword: String
 ) {
     fun currentTurnIndex(): Int {
         return members.indexOfFirst { it.isTurn }
