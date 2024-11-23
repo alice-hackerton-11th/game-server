@@ -4,3 +4,4 @@ plugins {
 rootProject.name = "elice-game-server"
 include("game-service")
 include("common")
+include("ai-service")
