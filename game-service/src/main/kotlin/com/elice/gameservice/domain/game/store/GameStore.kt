@@ -4,4 +4,5 @@ import com.elice.gameservice.domain.game.model.GameState
 
 interface GameStore {
     fun saveGameState(gameState: GameState): GameState
+    fun findGameState(roomId: Long): GameState?
 }

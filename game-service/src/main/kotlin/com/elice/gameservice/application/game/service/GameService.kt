@@ -28,4 +28,16 @@ class GameService(
         )
         return gameStore.saveGameState(gameState)
     }
+
+    @Transactional
+    fun updateTurn(roomId: Long): GameState {
+        val gameState =
+            gameStore.findGameState(roomId) ?: throw NotFoundException(BaseResponseStatus.NOT_FOUND_GAME_STATE)
+        if (gameState.currentTurnIndex() + 1 >= gameState.members.size) {
+            gameState.updateRound()
+        } else {
+            gameState.updateTurn()
+        }
+        return gameState
+    }
 }

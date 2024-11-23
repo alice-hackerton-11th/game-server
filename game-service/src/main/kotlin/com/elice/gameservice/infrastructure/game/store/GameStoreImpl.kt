@@ -1,5 +1,6 @@
 package com.elice.gameservice.infrastructure.game.store
 
+import com.elice.common.exception.NotFoundException
 import com.elice.gameservice.domain.game.model.GameState
 import com.elice.gameservice.domain.game.store.GameStore
 import com.elice.gameservice.infrastructure.game.repository.GameStateRepository
@@ -11,5 +12,9 @@ class GameStoreImpl(
 ) : GameStore {
     override fun saveGameState(gameState: GameState): GameState {
         return gameStateRepository.save(gameState.roomId, gameState)
+    }
+
+    override fun findGameState(roomId: Long): GameState? {
+        return gameStateRepository.findByRoomId(roomId)
     }
 }

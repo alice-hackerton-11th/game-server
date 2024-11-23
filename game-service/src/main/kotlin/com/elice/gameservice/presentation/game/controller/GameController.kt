@@ -15,4 +15,10 @@ class GameController(
     fun startGame(roomId: Long): GameState {
         return gameService.startGame(roomId)
     }
+
+    @MessageMapping("/next-turn")
+    @SendTo("/topic/room/{roomId}")
+    fun nextTurn(roomId: Long): GameState {
+        return gameService.updateTurn(roomId)
+    }
 }
