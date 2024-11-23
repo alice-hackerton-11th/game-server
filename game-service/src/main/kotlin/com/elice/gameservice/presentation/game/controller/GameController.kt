@@ -1,24 +1,24 @@
 package com.elice.gameservice.presentation.game.controller
 
 import com.elice.gameservice.application.game.service.GameService
-import com.elice.gameservice.domain.game.model.GameState
 import org.springframework.messaging.handler.annotation.MessageMapping
-import org.springframework.messaging.handler.annotation.SendTo
+import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class GameController(
-    private val gameService: GameService
+    private val gameService: GameService,
+    private val messagingTemplate: SimpMessagingTemplate
 ) {
-    @SendTo("/topic/room/{roomId}")
     @MessageMapping("/game-start")
-    fun startGame(roomId: Long): GameState {
-        return gameService.startGame(roomId)
+    fun startGame(roomId: String) {
+        val gameState = gameService.startGame(roomId.toLong())
+        messagingTemplate.convertAndSend("/topic/room/$roomId", gameState)
     }
 
     @MessageMapping("/next-turn")
-    @SendTo("/topic/room/{roomId}")
-    fun nextTurn(roomId: Long): GameState {
-        return gameService.updateTurn(roomId)
+    fun nextTurn(roomId: String) {
+        val gameState = gameService.updateTurn(roomId.toLong())
+        messagingTemplate.convertAndSend("/topic/room/$roomId", gameState)
     }
 }

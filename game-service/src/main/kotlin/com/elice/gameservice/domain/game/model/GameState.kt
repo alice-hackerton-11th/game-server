@@ -1,6 +1,6 @@
 package com.elice.gameservice.domain.game.model
 
-class GameState(
+data class GameState(
     val roomId: Long,
     val members: List<GameMemberInfo>,
     var currentTurnMemberId: Long,
